@@ -8,7 +8,7 @@ A free pack of skills for Claude and other AI agents. It is for people who want 
 
 | Skill | What it does | Try saying |
 |-------|--------------|------------|
-| [example-skill](skills/example-skill/) | Turns a vague goal into three next steps for this week. | "I don't know where to begin" |
+| [new-skills-repo](skills/new-skills-repo/) | Builds a new public GitHub repo that shares a pack of skills, with install steps and a README. | "Make a skills repo" |
 
 ## Install
 
@@ -47,7 +47,7 @@ npx skills add donnfelker/maverick-skills
 ### Any agent: one skill
 
 ```
-npx skills add donnfelker/maverick-skills --skill example-skill
+npx skills add donnfelker/maverick-skills --skill new-skills-repo
 ```
 
 ### Manual: clone and copy
@@ -65,14 +65,14 @@ You do not need to type a command. Describe what you want, and Claude picks the 
 
 **Example.** You type:
 
-> I want to start a vegetable garden but I don't know where to begin.
+> I want to share my skills with other people. Make me a skills repo.
 
-Claude loads `example-skill`, asks what "done" looks like and when you want it finished, then replies with three steps you can do this week and which one to do first.
+Claude loads `new-skills-repo`, asks for the repo name, your GitHub username, and what the skills are for, then builds the repo folder and makes the first commit.
 
 To call a skill by name:
 
 - Claude desktop and Cowork: type `/` and pick the skill from the list.
-- Claude Code: type `/maverick-skills:example-skill`.
+- Claude Code: type `/maverick-skills:new-skills-repo`.
 
 ## Updating
 
@@ -104,7 +104,9 @@ Found a mistake or have a skill to add? Open an issue or a pull request. The rul
 
 Built by Donn Felker.
 
-- Web: [donnfelker.com](https://donnfelker.com)
-- Instagram: [@donnfelker](https://instagram.com/donnfelker)
 - X: [@donnfelker](https://x.com/donnfelker)
-- LinkedIn: [@donnfelker](https://linkedin.com/in/donnfelker)
+- Instagram: [@donnfelker](https://instagram.com/donnfelker)
+- LinkedIn: [/in/donnfelker](https://linkedin.com/in/donnfelker)
+- YouTube: [youtube.com/@donn-felker](https://youtube.com/@donn-felker)
+- Web: [donnfelker.com](https://donnfelker.com)
+- Substack: [donnfelker.substack.com](https://donnfelker.substack.com)
