@@ -2,6 +2,10 @@
 
 Versions follow the rules in [AGENTS.md](AGENTS.md#versioning). The current version lives in `.claude-plugin/plugin.json`.
 
+## 0.3.0
+
+- Added `revise-plan`.
+
 ## 0.2.0
 
 - Added `new-skills-repo`.

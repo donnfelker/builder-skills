@@ -9,6 +9,7 @@ A free pack of skills for Claude and other AI agents. It is for people who want 
 | Skill | What it does | Try saying |
 |-------|--------------|------------|
 | [new-skills-repo](skills/new-skills-repo/) | Builds a new public GitHub repo that shares a pack of skills, with install steps and a README. | "Make a skills repo" |
+| [revise-plan](skills/revise-plan/) | Stress-tests a plan and returns the smallest revision that makes it more likely to succeed. | "Poke holes in my plan" |
 
 ## Install
 
