@@ -1,0 +1,15 @@
+{
+  "name": "maverick-skills",
+  "displayName": "Maverick Skills",
+  "version": "0.1.0",
+  "description": "Skills for people who do life and work their own way. Decisions, writing, learning, and planning.",
+  "author": {
+    "name": "Donn Felker",
+    "url": "https://donnfelker.com"
+  },
+  "homepage": "https://github.com/donnfelker/maverick-skills",
+  "repository": "https://github.com/donnfelker/maverick-skills",
+  "license": "MIT",
+  "keywords": ["decisions", "writing", "learning", "planning", "productivity"],
+  "skills": "./skills"
+}
