@@ -11,10 +11,19 @@ This skill is built to run repeatedly. Each revised plan becomes the next run's 
 
 ## Input
 
-- **Plan.** The plan to review. It may be pasted, attached, in a file, or earlier in the conversation. If more than one version exists, use the most recent revised plan unless the user points to another. If you cannot find a plan, ask for it and stop.
+- **Plan.** The plan to review. It may be pasted, attached, in a file, or earlier in the conversation. If a working file exists for this plan (see [Working file](#working-file)), it holds the current version. Otherwise, if more than one version exists, use the most recent revised plan unless the user points to another. If you cannot find a plan, ask for it and stop.
 - **Optional updates.** New information, answers to earlier questions, or changes in direction. There may be none.
 
-If the user says the plan is final, skip the review and return only the clean execution copy described under [Revised Plan](#revised-plan).
+If the user says the plan is final, skip the review and go straight to [Finishing](#finishing).
+
+## Working file
+
+Keep the plan in a file, not in the chat. A plan that is revised over and over inside the conversation gets long, and old versions get mixed up with new ones. A file holds one current version.
+
+1. **Plan from a file.** Create a working file next to the original. Name it after the original with `-revisions` added before the extension. Example: `trip-plan.md` becomes `trip-plan-revisions.md`. Write the revised plan there. Do not touch the original until [Finishing](#finishing).
+2. **Plan pasted into the chat.** Create a temporary working file in the current folder before you revise anything. Name it `<slugified-name>-plan-revisions.md`. If the user gave a name, use it. If not, infer a short name from the contents of the plan, such as its title or main goal, and do not stop to ask for one. Write the slug as two to five lowercase words joined by hyphens. Example: a plan about redoing a kitchen gets `kitchen-remodel-plan-revisions.md`. Use the same slug for the final plan file. Save the pasted plan there first, then make every revision in that file.
+3. **Later runs.** If the working file already exists, read it and edit it in place. Do not create a second working file, and do not rebuild the plan from the chat history.
+4. **No way to create files.** If you cannot create files here, return the revised plan in the chat in a single fenced block instead, and skip the file steps in this skill.
 
 ## Establish context
 
@@ -123,7 +132,7 @@ List only issues that warrant changing the plan or require a blocked decision to
 
 ### Revised Plan
 
-Return the complete plan in a single fenced block, ready to execute or paste into the next run. Never use "unchanged" or "see above" as a substitute for plan content. The next run sees only what is inside the block.
+Write the complete plan to the working file, ready to execute or to feed the next run. Never use "unchanged" or "see above" as a substitute for plan content. The next run sees only what is in the file. In the chat, give the path to the working file and do not paste the plan again. The Verdict, Material Issues, and Changelog already tell the user what changed.
 
 Preserve the input's structure. Where a listed issue calls for it, incorporate consequential assumptions, material remaining risks, and blocked decisions at the point they affect execution. For risks that warrant monitoring, include an observable warning sign and the action it triggers.
 
@@ -133,7 +142,14 @@ When a revision makes a material decision, preserve or append a compact Decision
 
 **Clean execution copy.** When the verdict is Converged, or the user states the plan is final, return the plan with the Decision History removed and `[ASSUMPTION]` labels removed from assumptions that an update confirmed. Keep unresolved assumptions and open risks that affect execution. Make no other changes.
 
-If the plan came from a file, ask once before overwriting it with the revised plan. If the user already agreed in this conversation, save without asking again.
+### Finishing
+
+Finish when the verdict is Converged, or when the user says the plan is done, good, or final.
+
+1. Turn the working file into the clean execution copy.
+2. **If the plan came from a file,** ask the user to confirm that you may replace the original plan file with the revised plan. On yes, write the revised plan to the original file, then delete the working file. On no, leave the original alone, keep the working file, and tell the user where it is.
+3. **If the plan was pasted into the chat,** save the plan as `<slugified-name>-plan.md` in the current folder, then delete the temporary working file. If a file with that name already exists, ask before replacing it.
+4. Tell the user the path to the final plan file.
 
 ### Changelog
 
