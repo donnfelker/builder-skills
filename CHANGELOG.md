@@ -2,6 +2,12 @@
 
 Versions follow the rules in [AGENTS.md](AGENTS.md#versioning). The current version lives in `.claude-plugin/plugin.json`.
 
+## 1.1.2
+
+- `watch-video` saves to `~/Documents/videos/` by default again, so all videos stay together and saved work is reused from any folder. In Cowork it saves to Claude's outputs folder, so you can see the files without saying where.
+- `read-social` saves to `~/Documents/social-fetches/` by default again, or Claude's outputs folder in Cowork.
+- `watch-video` preflight: when the network blocks video sites or the Whisper model download, it names the Claude setting to change instead of suggesting `--install`.
+
 ## 1.1.1
 
 - Moved the "Try saying" phrases out of the README skills table into a new `EXAMPLES.md`, with one worked example per skill.

@@ -32,6 +32,10 @@ HOSTS = {
 
 KEYS = ["GEMINI_API_KEY", "OPENAI_API_KEY", "GROQ_API_KEY"]
 
+NETWORK_FIX = ("To allow it in Claude: Settings > Capabilities > Allow network egress, all domains "
+               "(Team and Enterprise: an admin sets this in Organization settings > Capabilities), "
+               "then start a new session.")
+
 
 def run(cmd, timeout=600):
     try:
@@ -176,6 +180,7 @@ def build_report(probe_network):
         "whisper": {"backends": whisper_backends(), "gpu": gpu()},
         "keys": {k: bool(os.environ.get(k)) for k in KEYS},
         "output_dir": {"path": str(out_dir), "writable": writable(out_dir)},
+        "claude_sandbox": common.in_claude_sandbox(),
         "network": {},
         "install_log": [],
     }
@@ -189,16 +194,22 @@ def summarize(report):
     can, cannot = [], []
     t = report["tools"]
     net = report["network"]
-    if t["yt-dlp"]["path"] and net.get("youtube", True):
+    if not net.get("youtube", True):
+        cannot.append("download from URLs: the network here blocks video sites. " + NETWORK_FIX +
+                      " Or upload the video file instead.")
+    elif t["yt-dlp"]["path"]:
         can.append("download from video URLs")
     else:
-        cannot.append("download from URLs" + ("" if t["yt-dlp"]["path"] else " (yt-dlp missing: %s)" % common.install_hint("yt-dlp")))
+        cannot.append("download from URLs (yt-dlp missing: %s)" % common.install_hint("yt-dlp"))
     if t["ffmpeg"]["path"]:
         can.append("extract audio and frames")
     else:
         cannot.append("extract audio or frames (ffmpeg missing: %s)" % common.install_hint("ffmpeg"))
-    if report["whisper"]["backends"]:
+    if report["whisper"]["backends"] and net.get("huggingface", True):
         can.append("transcribe locally with " + ", ".join(report["whisper"]["backends"]))
+    elif not net.get("huggingface", True):
+        cannot.append("transcribe locally: the network here blocks the Whisper model download (huggingface.co). " +
+                      NETWORK_FIX + " Or provide a transcript file (.vtt, .srt, .txt) with the video.")
     else:
         cannot.append("transcribe locally (no Whisper: %s)" % common.install_hint("whisper"))
     if report["keys"]["GEMINI_API_KEY"]:
