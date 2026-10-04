@@ -2,6 +2,12 @@
 
 Versions follow the rules in [AGENTS.md](AGENTS.md#versioning). The current version lives in `.claude-plugin/plugin.json`.
 
+## 1.1.0
+
+- Added `watch-video`: transcripts from video links and files, with optional visual and multimodal modes. Runs on macOS (Homebrew, MLX-Whisper) and Linux (pip, faster-whisper), with tested scripts, caching, clip ranges, and a privacy gate before any upload.
+- Added `read-social`: reads social posts by URL into one JSON shape. Free strategies first, including defuddle, with paid APIs only behind keys.
+- `distill-video` now accepts a video link or file and gets the transcript through `watch-video` when it is installed. Notes cite timestamps when the transcript has them.
+
 ## 1.0.1
 
 - Updated the plugin description in `marketplace.json` to match the new tagline.

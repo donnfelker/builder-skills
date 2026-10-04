@@ -1,0 +1,12 @@
+{
+  "output_dir": "~/Documents/videos",
+  "language": null,
+  "whisper_model_mlx": "mlx-community/whisper-large-v3-turbo",
+  "whisper_model_gpu": "large-v3-turbo",
+  "whisper_model_cpu": "small",
+  "chunk_seconds": 600,
+  "max_frames": 120,
+  "confirm_frames_over": 60,
+  "gemini_model": "gemini-3.8-flash",
+  "hosted_provider": "openai"
+}
