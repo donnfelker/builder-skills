@@ -1,0 +1,36 @@
+name: Sync Skills
+
+# After a push to main that touches skills, rebuilds the README skills table
+# (between the SKILLS:START and SKILLS:END markers) from each skill's
+# frontmatter, and commits the result. Uses the built-in GITHUB_TOKEN, so no
+# bot account is needed; commits it makes do not trigger other workflows.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "skills/**"
+      - ".claude-plugin/marketplace.json"
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: true
+
+      - name: Sync skills
+        run: node .github/scripts/sync-skills.js
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_user_name: MaverickBot
+          commit_user_email: maverickbot+github-actions[bot]@users.noreply.github.com
+          commit_message: "chore: sync README skills table with skills/"
+          file_pattern: "README.md .claude-plugin/marketplace.json .claude-plugin/plugin.json"

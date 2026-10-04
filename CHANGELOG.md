@@ -2,10 +2,19 @@
 
 Versions follow the rules in [AGENTS.md](AGENTS.md#versioning). The current version lives in `.claude-plugin/plugin.json`.
 
+## 1.1.1
+
+- Moved the "Try saying" phrases out of the README skills table into a new `EXAMPLES.md`, with one worked example per skill.
+- The README skills table is now generated from each skill's frontmatter by a Sync Skills workflow after each push to `main`.
+- Added an OpenAI Codex plugin (`.codex-plugin/plugin.json`, `.agents/plugins/marketplace.json`) and Codex install, update, and remove steps.
+- README: names the agents it works with, adds "What are skills?", a diagram of how the skills work together, usage examples, install tips for agent-run installs and `/plugin` outside the terminal, and `--list`.
+- Added `CONTRIBUTING.md`.
+
 ## 1.1.0
 
 - Added `watch-video`: transcripts from video links and files, with optional visual and multimodal modes. Runs on macOS (Homebrew, MLX-Whisper) and Linux (pip, faster-whisper), with tested scripts, caching, clip ranges, and a privacy gate before any upload.
 - Added `read-social`: reads social posts by URL into one JSON shape. Free strategies first, including defuddle, with paid APIs only behind keys.
+- Added GitHub workflows: repo rule checks (`scripts/check-repo.py`), the Agent Skills validator, skill tests on Linux and macOS, and a release on each version bump.
 - `distill-video` now accepts a video link or file and gets the transcript through `watch-video` when it is installed. Notes cite timestamps when the transcript has them.
 
 ## 1.0.1

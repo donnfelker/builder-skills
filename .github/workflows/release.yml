@@ -1,0 +1,66 @@
+name: Release on version bump
+
+# Creates a git tag and GitHub Release when the version in
+# .claude-plugin/plugin.json changes on main. Release notes come from the
+# matching `## x.y.z` section of CHANGELOG.md. Does nothing if the tag exists.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".claude-plugin/plugin.json"
+      - "CHANGELOG.md"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Read version and check for an existing tag
+        id: ver
+        run: |
+          VERSION=$(python3 -c "import json;print(json.load(open('.claude-plugin/plugin.json'))['version'])")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          if git rev-parse -q --verify "refs/tags/v$VERSION" >/dev/null; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "v$VERSION is already tagged. Nothing to do."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Pull release notes from CHANGELOG.md
+        if: steps.ver.outputs.exists == 'false'
+        run: |
+          python3 - "${{ steps.ver.outputs.version }}" <<'PY'
+          import re, sys
+          v = sys.argv[1]
+          text = open("CHANGELOG.md").read()
+          m = re.search(r"^## %s\s*\n(.*?)(?=^## |\Z)" % re.escape(v), text, re.S | re.M)
+          body = m.group(1).strip() if m else "Release %s" % v
+          open("release-notes.md", "w").write(body + "\n")
+          first = next((l for l in body.splitlines() if l.strip()), "")
+          first = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", first)
+          first = re.sub(r"^- |[*`_]", "", first).strip()
+          title = "v%s: %s" % (v, first)
+          if len(title) > 100:
+              title = title[:97].rstrip() + "..."
+          open("release-title.txt", "w").write(title)
+          print("Title:", title)
+          PY
+
+      - name: Create tag and release
+        if: steps.ver.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${{ steps.ver.outputs.version }}"
+          gh release create "v$VERSION" \
+            --target "${{ github.sha }}" \
+            --title "$(cat release-title.txt)" \
+            --notes-file release-notes.md
