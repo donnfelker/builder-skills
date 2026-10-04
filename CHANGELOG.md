@@ -2,6 +2,11 @@
 
 Versions follow the rules in [AGENTS.md](AGENTS.md#versioning). The current version lives in `.claude-plugin/plugin.json`.
 
+## 1.0.0
+
+- Renamed the pack from `maverick-skills` to `builder-skills`. New tagline: "Skills for people who build things."
+- If you installed the old name, remove it and install `builder-skills` using the steps in the README.
+
 ## 0.4.0
 
 - Added `distill-video`.

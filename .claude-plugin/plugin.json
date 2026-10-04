@@ -1,14 +1,14 @@
 {
-  "name": "maverick-skills",
-  "displayName": "Maverick Skills",
-  "version": "0.4.0",
-  "description": "Skills for people who do life and work their own way. Decisions, writing, learning, and planning.",
+  "name": "builder-skills",
+  "displayName": "Builder Skills",
+  "version": "1.0.0",
+  "description": "Skills for people who build things. Decisions, writing, learning, and planning.",
   "author": {
     "name": "Donn Felker",
     "url": "https://donnfelker.com"
   },
-  "homepage": "https://github.com/donnfelker/maverick-skills",
-  "repository": "https://github.com/donnfelker/maverick-skills",
+  "homepage": "https://github.com/donnfelker/builder-skills",
+  "repository": "https://github.com/donnfelker/builder-skills",
   "license": "MIT",
   "keywords": ["decisions", "writing", "learning", "planning", "productivity"],
   "skills": "./skills"

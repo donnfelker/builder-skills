@@ -4,9 +4,9 @@ Rules for any agent working in this repository. This file is the single source o
 
 ## What this repo is
 
-`maverick-skills` is a free pack of agent skills for non-technical work and life: decisions, writing, learning, and planning. Tagline: "Skills for people who do life and work their own way."
+`builder-skills` is a free pack of agent skills for non-technical work and life: decisions, writing, learning, and planning. Tagline: "Skills for people who build things."
 
-- GitHub: https://github.com/donnfelker/maverick-skills
+- GitHub: https://github.com/donnfelker/builder-skills
 - Author: Donn Felker
 - License: MIT
 - Technical and coding skills do not belong here. They live in a different repo.
@@ -16,7 +16,7 @@ The audience is people who may have never used a terminal. Write every skill and
 ## Layout
 
 ```
-maverick-skills/
+builder-skills/
 ├── .claude-plugin/
 │   ├── plugin.json         # plugin manifest (name, version, skills path)
 │   └── marketplace.json    # marketplace manifest (lists the plugin)
@@ -84,7 +84,7 @@ When you add, rename, or remove a skill:
 4. **`.claude-plugin/marketplace.json`.** Update the plugin `description` only if the scope of the pack changed. Do not add a version here. `plugin.json` is the single place for it.
 5. **`CHANGELOG.md`.** Add an entry under the new version.
 
-Do not rename the plugin or marketplace name (`maverick-skills`). Users type it in install commands.
+Do not rename the plugin or marketplace name (`builder-skills`). Users type it in install commands.
 
 ## Versioning
 
@@ -107,7 +107,7 @@ Run each check before committing.
 - [ ] Every skill appears in the README table with a working folder link.
 - [ ] `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` are valid JSON.
 - [ ] `claude plugin validate .` passes, if the `claude` CLI is available.
-- [ ] Every install command in the README uses `donnfelker/maverick-skills`.
+- [ ] Every install command in the README uses `donnfelker/builder-skills`.
 - [ ] Version bumped in `plugin.json` and noted in `CHANGELOG.md`.
 - [ ] No em dashes, en dashes, or hype words in changed files.
 - [ ] No secrets, personal paths, or private notes in any file.

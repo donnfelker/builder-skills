@@ -1,13 +1,13 @@
 {
-  "name": "maverick-skills",
-  "description": "Skills for people who do life and work their own way.",
+  "name": "builder-skills",
+  "description": "Skills for people who build things.",
   "owner": {
     "name": "Donn Felker",
     "url": "https://donnfelker.com"
   },
   "plugins": [
     {
-      "name": "maverick-skills",
+      "name": "builder-skills",
       "source": "./",
       "description": "Free skills for decisions, writing, learning, and planning."
     }

@@ -1,8 +1,8 @@
-# Maverick Skills
+# Builder Skills
 
-**Skills for people who do life and work their own way.**
+**Skills for people who build things.**
 
-A free pack of skills for Claude and other AI agents. It is for people who want help with decisions, writing, learning, and planning, and who do not want to learn a new tool to get it.
+A free pack of skills for Claude and other AI agents. It is for people who build things, like a business, a project, a habit, or a plan, and want help with the decisions, writing, learning, and planning along the way. You do not need to learn a new tool to use it.
 
 ## Skills
 
@@ -24,18 +24,18 @@ Pick one method. If you are not sure, use the first one.
 4. Paste this and confirm:
 
 ```
-donnfelker/maverick-skills
+donnfelker/builder-skills
 ```
 
-5. Find **maverick-skills** in the list and click **Add**.
+5. Find **builder-skills** in the list and click **Add**.
 
 The skills now work in chat, Cowork, and Claude Code on your account.
 
 ### Claude Code
 
 ```
-/plugin marketplace add donnfelker/maverick-skills
-/plugin install maverick-skills@maverick-skills
+/plugin marketplace add donnfelker/builder-skills
+/plugin install builder-skills@builder-skills
 ```
 
 ### Any agent: all skills
@@ -43,20 +43,20 @@ The skills now work in chat, Cowork, and Claude Code on your account.
 Needs [Node.js](https://nodejs.org).
 
 ```
-npx skills add donnfelker/maverick-skills
+npx skills add donnfelker/builder-skills
 ```
 
 ### Any agent: one skill
 
 ```
-npx skills add donnfelker/maverick-skills --skill new-skills-repo
+npx skills add donnfelker/builder-skills --skill new-skills-repo
 ```
 
 ### Manual: clone and copy
 
 ```
-git clone https://github.com/donnfelker/maverick-skills.git
-cp -r maverick-skills/skills/* ~/.claude/skills/
+git clone https://github.com/donnfelker/builder-skills.git
+cp -r builder-skills/skills/* ~/.claude/skills/
 ```
 
 This copies the skills into Claude Code's personal skills folder. Other agents use a different folder. Check your agent's docs.
@@ -74,14 +74,14 @@ Claude loads `new-skills-repo`, asks for the repo name, your GitHub username, an
 To call a skill by name:
 
 - Claude desktop and Cowork: type `/` and pick the skill from the list.
-- Claude Code: type `/maverick-skills:new-skills-repo`.
+- Claude Code: type `/builder-skills:new-skills-repo`.
 
 ## Updating
 
 | Method | How |
 |--------|-----|
 | Claude desktop / Cowork | **Customize > Plugins**, open the marketplace, click **Check for updates**. |
-| Claude Code | `claude plugin update maverick-skills@maverick-skills` |
+| Claude Code | `claude plugin update builder-skills@builder-skills` |
 | `npx skills` | `npx skills update` |
 | Manual | `git pull`, then copy the skills again. |
 
@@ -89,8 +89,8 @@ To call a skill by name:
 
 | Method | How |
 |--------|-----|
-| Claude desktop / Cowork | **Customize > Plugins**, open **maverick-skills**, open its menu, click **Remove**. |
-| Claude Code | `claude plugin uninstall maverick-skills@maverick-skills` |
+| Claude desktop / Cowork | **Customize > Plugins**, open **builder-skills**, open its menu, click **Remove**. |
+| Claude Code | `claude plugin uninstall builder-skills@builder-skills` |
 | `npx skills` | `npx skills remove` |
 | Manual | Delete the copied folders from your skills directory. |
 
