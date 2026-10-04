@@ -11,8 +11,10 @@ Checks:
   - SKILL.md body is under 500 lines
   - every file in references/ is linked from SKILL.md or another reference file
   - README skills table: one row per skill, links work, rows in alphabetical order
+  - EXAMPLES.md: one section per skill, in alphabetical order
   - README install commands use donnfelker/builder-skills and `--skill` names a real skill
   - plugin.json and marketplace.json are valid JSON; the version lives only in plugin.json
+  - the Codex manifests are valid, and .codex-plugin/plugin.json's version matches
   - CHANGELOG.md has a heading for the current version
   - no em dashes, en dashes, or hype words in Markdown; no personal paths anywhere in skills/
 With --base:
@@ -103,7 +105,7 @@ def check_skill(folder):
 
 
 def check_text_rules():
-    files = [ROOT / "README.md", ROOT / "CHANGELOG.md", ROOT / "AGENTS.md"] + sorted((ROOT / "skills").rglob("*.md"))
+    files = [ROOT / "README.md", ROOT / "CHANGELOG.md", ROOT / "AGENTS.md", ROOT / "EXAMPLES.md"] + sorted((ROOT / "skills").rglob("*.md"))
     for p in files:
         if not p.is_file():
             continue
@@ -119,6 +121,22 @@ def check_text_rules():
             for n, line in enumerate(p.read_text(encoding="utf-8", errors="replace").split("\n"), 1):
                 if PERSONAL.search(line):
                     err("%s:%d" % (rel(p), n), "personal path")
+
+
+def check_examples(skill_names):
+    path = ROOT / "EXAMPLES.md"
+    if not path.is_file():
+        err("EXAMPLES.md", "missing")
+        return
+    listed = re.findall(r"^## `([^`]+)`", path.read_text(encoding="utf-8"), re.M)
+    for name in listed:
+        if name not in skill_names:
+            err("EXAMPLES.md", "section %r names a skill that does not exist" % name)
+    for name in skill_names:
+        if name not in listed:
+            err("EXAMPLES.md", "skill %r has no example" % name)
+    if listed != sorted(listed):
+        err("EXAMPLES.md", "sections are not in alphabetical order")
 
 
 def check_readme(skill_names):
@@ -138,8 +156,12 @@ def check_readme(skill_names):
     for m in re.finditer(r"--skill\s+([a-z0-9-]+)", readme):
         if m.group(1) not in skill_names:
             err("README.md", "--skill %s names a skill that does not exist" % m.group(1))
+    in_code = False
     for line in readme.split("\n"):
-        if re.search(r"(npx skills add|marketplace add|git clone)", line) and REPO not in line:
+        if line.lstrip("> ").startswith("```"):
+            in_code = not in_code
+            continue
+        if in_code and re.search(r"(npx skills add|marketplace add|git clone)", line) and REPO not in line:
             err("README.md", "install command does not use %s: %s" % (REPO, line.strip()))
 
 
@@ -168,6 +190,20 @@ def check_manifests():
             err(".claude-plugin/marketplace.json", "marketplace name must stay builder-skills")
         if "version" in json.dumps(market):
             err(".claude-plugin/marketplace.json", "no version here; plugin.json is the single place for it")
+    codex = load_json(ROOT / ".codex-plugin" / "plugin.json")
+    codex_market = load_json(ROOT / ".agents" / "plugins" / "marketplace.json")
+    if codex:
+        if codex.get("name") != "builder-skills":
+            err(".codex-plugin/plugin.json", "plugin name must stay builder-skills")
+        if codex.get("skills") not in ("./skills", "./skills/"):
+            err(".codex-plugin/plugin.json", "skills path must be ./skills/")
+        if version and codex.get("version") != version:
+            err(".codex-plugin/plugin.json", "version %s must match .claude-plugin/plugin.json (%s)"
+                % (codex.get("version"), version))
+    if codex_market:
+        names = [pl.get("name") for pl in codex_market.get("plugins", [])]
+        if codex_market.get("name") != "builder-skills" or names != ["builder-skills"]:
+            err(".agents/plugins/marketplace.json", "marketplace and plugin name must be builder-skills")
     if version:
         changelog = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
         if not re.search(r"^## %s\s*$" % re.escape(version), changelog, re.M):
@@ -203,6 +239,7 @@ def main():
         check_skill(folder)
     names = [f.name for f in folders]
     check_readme(names)
+    check_examples(names)
     version = check_manifests()
     check_text_rules()
     if base:

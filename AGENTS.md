@@ -20,7 +20,13 @@ builder-skills/
 ├── .claude-plugin/
 │   ├── plugin.json         # plugin manifest (name, version, skills path)
 │   └── marketplace.json    # marketplace manifest (lists the plugin)
-├── .github/workflows/      # CI: repo rules, skill validation, skill tests, releases
+├── .codex-plugin/
+│   └── plugin.json         # OpenAI Codex plugin manifest (same version)
+├── .agents/plugins/
+│   └── marketplace.json    # OpenAI Codex marketplace manifest
+├── .github/
+│   ├── scripts/sync-skills.js   # rebuilds the README skills table
+│   └── workflows/          # CI: repo rules, skill validation, tests, sync, releases
 ├── scripts/
 │   └── check-repo.py       # checks the rules in this file
 ├── skills/
@@ -30,6 +36,8 @@ builder-skills/
 ├── AGENTS.md
 ├── CLAUDE.md               # imports AGENTS.md
 ├── CHANGELOG.md
+├── CONTRIBUTING.md         # how to report problems and send changes
+├── EXAMPLES.md            # one worked example per skill
 ├── LICENSE
 └── README.md
 ```
@@ -82,17 +90,20 @@ description: What the skill does. When to use it, with the phrases a person woul
 
 When you add, rename, or remove a skill:
 
-1. **README skills table.** Add, update, or remove the row. Columns: skill (linked to its folder), what it does, example trigger phrase. Keep rows in alphabetical order.
-2. **README install examples.** The `--skill <name>` example must use a real skill name.
-3. **`.claude-plugin/plugin.json`.** The `skills` path is `./skills`. It picks up new folders on its own. Do not list skills one by one. Bump `version`.
-4. **`.claude-plugin/marketplace.json`.** Update the plugin `description` only if the scope of the pack changed. Do not add a version here. `plugin.json` is the single place for it.
-5. **`CHANGELOG.md`.** Add an entry under the new version.
+1. **README skills table.** Generated from each skill's frontmatter by `.github/scripts/sync-skills.js`, between the `SKILLS:START` and `SKILLS:END` markers. The Sync Skills workflow runs it after each push to `main`. Run `node .github/scripts/sync-skills.js` before committing so the pull request already has the right table. Do not edit the rows by hand.
+2. **`EXAMPLES.md`.** Add, update, or remove the skill's section. Each section has a "Try saying" phrase, what the person says, and what the skill does. Keep sections in alphabetical order.
+   This also applies when you edit a skill. If the edit changes the trigger phrases, the inputs, or the output, update the skill's section in `EXAMPLES.md` in the same commit.
+3. **README install examples.** The `--skill <name>` example must use a real skill name.
+4. **`.claude-plugin/plugin.json`.** The `skills` path is `./skills`. It picks up new folders on its own. Do not list skills one by one. Bump `version`.
+5. **`.claude-plugin/marketplace.json`.** Update the plugin `description` only if the scope of the pack changed. Do not add a version here.
+6. **`.codex-plugin/plugin.json`.** Set `version` to the same value as `.claude-plugin/plugin.json`. The `skills` path is `./skills/`. Leave `.agents/plugins/marketplace.json` alone unless the plugin name changes.
+7. **`CHANGELOG.md`.** Add an entry under the new version.
 
 Do not rename the plugin or marketplace name (`builder-skills`). Users type it in install commands.
 
 ## Versioning
 
-One version number, stored in `.claude-plugin/plugin.json`. Format `x.y.z`.
+One version number, stored in `.claude-plugin/plugin.json` and copied to `.codex-plugin/plugin.json`. Format `x.y.z`. `scripts/check-repo.py` fails if the two differ.
 
 - **x:** repo-wide changes. Restructures, renames, breaking changes.
 - **y:** a new skill is added.
@@ -111,9 +122,10 @@ Run each check before committing.
 - [ ] Each description is 1024 characters or fewer and says when to trigger.
 - [ ] No skill requires another skill to work.
 - [ ] Every skill appears in the README table with a working folder link.
-- [ ] `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` are valid JSON.
+- [ ] Every skill has a section in `EXAMPLES.md`.
+- [ ] `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json`, and `.agents/plugins/marketplace.json` are valid JSON.
 - [ ] `claude plugin validate .` passes, if the `claude` CLI is available.
 - [ ] Every install command in the README uses `donnfelker/builder-skills`.
-- [ ] Version bumped in `plugin.json` and noted in `CHANGELOG.md`.
+- [ ] Version bumped in both `plugin.json` files and noted in `CHANGELOG.md`.
 - [ ] No em dashes, en dashes, or hype words in changed files.
 - [ ] No secrets, personal paths, or private notes in any file.

@@ -1,5 +1,6 @@
-# Skill install artifacts (npx skills add)
-.agents/
+# Skill install artifacts (npx skills add). .agents/plugins/ is the Codex marketplace, so keep it.
+.agents/*
+!.agents/plugins/
 .claude/
 skills-lock.json
 

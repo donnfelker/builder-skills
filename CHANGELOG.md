@@ -2,6 +2,14 @@
 
 Versions follow the rules in [AGENTS.md](AGENTS.md#versioning). The current version lives in `.claude-plugin/plugin.json`.
 
+## 1.1.1
+
+- Moved the "Try saying" phrases out of the README skills table into a new `EXAMPLES.md`, with one worked example per skill.
+- The README skills table is now generated from each skill's frontmatter by a Sync Skills workflow after each push to `main`.
+- Added an OpenAI Codex plugin (`.codex-plugin/plugin.json`, `.agents/plugins/marketplace.json`) and Codex install, update, and remove steps.
+- README: names the agents it works with, adds "What are skills?", a diagram of how the skills work together, usage examples, install tips for agent-run installs and `/plugin` outside the terminal, and `--list`.
+- Added `CONTRIBUTING.md`.
+
 ## 1.1.0
 
 - Added `watch-video`: transcripts from video links and files, with optional visual and multimodal modes. Runs on macOS (Homebrew, MLX-Whisper) and Linux (pip, faster-whisper), with tested scripts, caching, clip ranges, and a privacy gate before any upload.

@@ -1,0 +1,20 @@
+{
+  "name": "builder-skills",
+  "interface": {
+    "displayName": "Builder Skills"
+  },
+  "plugins": [
+    {
+      "name": "builder-skills",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
