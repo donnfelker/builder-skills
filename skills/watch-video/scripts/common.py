@@ -62,9 +62,31 @@ def load_config():
     return cfg
 
 
+# Fallback only: Claude's sandboxes (Cowork, claude.ai) show the person files
+# saved here. The agent should pass its own outputs folder as WATCH_VIDEO_DIR.
+SANDBOX_OUTPUTS = Path("/mnt/user-data/outputs")
+
+
+def in_claude_sandbox():
+    return SANDBOX_OUTPUTS.is_dir() and os.access(str(SANDBOX_OUTPUTS), os.W_OK)
+
+
+def default_home():
+    """~/Documents/videos, or ~/videos when there is no Documents folder."""
+    docs = Path.home() / "Documents"
+    return (docs if docs.is_dir() else Path.home()) / "videos"
+
+
 def output_base(cfg=None):
+    """WATCH_VIDEO_DIR, then config, then Claude's outputs folder, then ~/Documents/videos.
+
+    One fixed home keeps all videos together, so a second run from any folder
+    finds the cached workdir.
+    """
     cfg = cfg or load_config()
-    raw = os.environ.get("WATCH_VIDEO_DIR") or cfg.get("output_dir") or "./videos"
+    raw = os.environ.get("WATCH_VIDEO_DIR") or cfg.get("output_dir")
+    if not raw:
+        raw = str(SANDBOX_OUTPUTS / "videos") if in_claude_sandbox() else str(default_home())
     return Path(raw).expanduser().resolve()
 
 

@@ -17,7 +17,10 @@ Run `scripts/preflight.py`. It reports the OS, tools, Whisper backend, network r
 
 - **No shell at all** (you cannot run commands here): say that this skill needs a place that can run scripts, such as Claude Code or Cowork. Ask for a transcript file instead, and stop.
 - **Something missing**: on macOS, preflight names a `brew` or `uv` command. On Linux, it offers `--install`, which puts yt-dlp, ffmpeg, and faster-whisper into a private folder (`~/.cache/watch-video/venv`). Ask before installing anything, then run `preflight.py --install`.
-- Run preflight once per session, not once per video.
+- **Network blocked** (a `cannot` entry says the network blocks video sites or the Whisper model): pass the message on as written. It names the Claude setting to change. Do not run `--install` for that; installing does not get past a blocked network. Offer the routes that still work: an uploaded video with a transcript file, or visual mode.
+- **Where to save.** If your environment tells you where to put files for the person (an outputs folder, a connected folder), set `WATCH_VIDEO_DIR` to a `videos` folder inside it on every script call, for example `WATCH_VIDEO_DIR=<outputs>/videos python3 scripts/fetch.py ...`. If you do not know, leave it unset; the scripts pick a folder the person can see. Never ask the person where to save.
+- **Attached files.** Use the path you were given for an attached file. Do not ask the person for it.
+- Run preflight once per session, not once per video. In cloud sessions the install does not carry over, so a new session may need `--install` again.
 
 ## Step 2: Read the request
 
@@ -92,7 +95,7 @@ In chat:
 | `moments.md`, `summary.md` | Visual and multimodal write-ups |
 | `post.json` | Social post data from `read-social`, when used |
 
-The workdir lives in `WATCH_VIDEO_DIR` if set, else `output_dir` in the config file (`~/.config/watch-video/config.json`; see `config.example.json`), else `./videos/` in the current folder.
+The workdir lives in `WATCH_VIDEO_DIR` if set, else `output_dir` in the config file (`~/.config/watch-video/config.json`; see `config.example.json`), else Claude's sandbox outputs folder (`/mnt/user-data/outputs/videos/`) when it exists, as in Cowork, else `~/Documents/videos/` (or `~/videos/` with no Documents folder). Every video gets its own workdir there, so all videos stay together and a second run from any folder reuses the saved work.
 
 ## More detail
 

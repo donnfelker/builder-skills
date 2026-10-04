@@ -89,7 +89,7 @@ A field the site does not provide is `null`, never `0`. Missing data is not zero
 | `--save` | Save the JSON to `<folder>/<platform>-<id>.json`. |
 | `--no-cache` | Skip the cache. |
 
-`<folder>` is `READ_SOCIAL_DIR` if set, else `./social/` in the current folder. Default: the post only, media as URLs, nothing downloaded.
+`<folder>` is `READ_SOCIAL_DIR` if set. Otherwise, in Cowork and other Claude sandboxes, it is a `social-fetches` folder in the place you were told to save files for the person (often `/mnt/user-data/outputs/`). Everywhere else it is `~/Documents/social-fetches/`, so all saved posts stay together. Default: the post only, media as URLs, nothing downloaded.
 
 ## Step 6: Cache
 

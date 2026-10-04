@@ -1,7 +1,7 @@
 {
   "name": "builder-skills",
   "description": "Skills for people who build things. Decisions, planning, video transcripts and notes, and reading social posts.",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": {
     "name": "Donn Felker",
     "url": "https://donnfelker.com"

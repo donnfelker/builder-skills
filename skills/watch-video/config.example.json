@@ -1,5 +1,5 @@
 {
-  "output_dir": "~/Documents/videos",
+  "output_dir": "~/Dropbox/videos",
   "language": null,
   "whisper_model_mlx": "mlx-community/whisper-large-v3-turbo",
   "whisper_model_gpu": "large-v3-turbo",

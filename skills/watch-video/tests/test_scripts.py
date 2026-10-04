@@ -227,6 +227,51 @@ class FrameTests(unittest.TestCase):
             self.assertEqual(len(list(Path(tmp).glob("*.jpg"))), 5)
 
 
+class OutputDirTests(unittest.TestCase):
+    def setUp(self):
+        self.saved = (common.SANDBOX_OUTPUTS, os.environ.pop("WATCH_VIDEO_DIR", None))
+
+    def tearDown(self):
+        common.SANDBOX_OUTPUTS = self.saved[0]
+        os.environ.pop("WATCH_VIDEO_DIR", None)
+        if self.saved[1] is not None:
+            os.environ["WATCH_VIDEO_DIR"] = self.saved[1]
+
+    def test_order_env_then_config_then_sandbox_then_cwd(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            common.SANDBOX_OUTPUTS = Path(tmp) / "missing"
+            self.assertEqual(common.output_base({"output_dir": None}), common.default_home().resolve())
+            self.assertIn(common.default_home().parent.name, ("Documents", Path.home().name))
+            common.SANDBOX_OUTPUTS = Path(tmp)
+            self.assertEqual(common.output_base({"output_dir": None}), (Path(tmp) / "videos").resolve())
+            self.assertEqual(common.output_base({"output_dir": tmp + "/cfg"}), Path(tmp + "/cfg").resolve())
+            os.environ["WATCH_VIDEO_DIR"] = tmp + "/env"
+            self.assertEqual(common.output_base({"output_dir": tmp + "/cfg"}), Path(tmp + "/env").resolve())
+
+
+class PreflightTests(unittest.TestCase):
+    def report(self, youtube, hf, ytdlp=None, whisper=None):
+        return {"tools": {"yt-dlp": {"path": ytdlp}, "ffmpeg": {"path": "/usr/bin/ffmpeg"}},
+                "network": {"youtube": youtube, "huggingface": hf},
+                "whisper": {"backends": whisper or {}},
+                "keys": {"GEMINI_API_KEY": False, "OPENAI_API_KEY": False, "GROQ_API_KEY": False},
+                "output_dir": {"writable": True, "path": "/x"}, "youtube_js_runtime": True}
+
+    def test_blocked_network_names_the_setting_not_install(self):
+        import preflight
+        r = self.report(youtube=False, hf=False)
+        preflight.summarize(r)
+        text = " ".join(r["cannot"])
+        self.assertIn("Allow network egress", text)
+        self.assertNotIn("--install", text)
+
+    def test_open_network_with_tools_is_ok(self):
+        import preflight
+        r = self.report(youtube=True, hf=True, ytdlp="/v/yt-dlp", whisper={"faster_whisper": {}})
+        preflight.summarize(r)
+        self.assertEqual(r["status"], "ok")
+
+
 class TimeTests(unittest.TestCase):
     def test_parse_and_format(self):
         self.assertEqual(common.parse_time("1:02:03"), 3723)
