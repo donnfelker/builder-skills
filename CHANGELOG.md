@@ -2,6 +2,12 @@
 
 Versions follow the rules in [AGENTS.md](AGENTS.md#versioning). The current version lives in `.claude-plugin/plugin.json`.
 
+## 1.1.3
+
+- `watch-video` says where video links work: Claude desktop and Claude Code. Cloud sessions are often blocked by video sites. When that happens, it tells you to switch and explains why in plain words.
+- `watch-video` explains the network setting for code in Claude, with a warning about the risk of opening network access, and offers attaching the file as the option that needs no change.
+- `watch-video` installs its tools without asking inside Claude's temporary sandboxes. On your own computer it still asks first.
+
 ## 1.1.2
 
 - `watch-video` saves to `~/Documents/videos/` by default again, so all videos stay together and saved work is reused from any folder. In Cowork it saves to Claude's outputs folder, so you can see the files without saying where.

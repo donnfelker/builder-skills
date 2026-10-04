@@ -4,8 +4,8 @@ Scripts report errors as JSON with `error`, `fix`, and sometimes `kind`. Pass `e
 
 | `kind` or symptom | Cause | What to tell the person |
 |---|---|---|
-| `network` | This environment cannot reach the site. Common in cloud sandboxes. | Upload the video file here, or download it on your own computer and hand it back. Do not retry. |
-| `bot_check` | YouTube wants a sign-in. Common from datacenter IPs, occasional at home. | On your own computer: retry with `--cookies-from-browser chrome` (or `safari`, `firefox`). In a sandbox: upload the file. |
+| `network` | The network setting for code in Claude blocks the site. | Attach the video file (no setting change needed). Or change Settings > Capabilities and start a new session, after reading the risk warning in the message. Do not retry. |
+| `bot_check` | The site wants a sign-in to prove the request is not a bot. Cloud sessions run on Anthropic's servers, and sites block data centers. | Run it in Claude desktop or Claude Code, which use the person's own internet connection. Already there: retry with `--cookies-from-browser chrome` (or `safari`, `firefox`). Or attach the file. |
 | `private` | Private, members-only, or age-gated. | Same as `bot_check`. Sandboxes have no browser profile. |
 | `geo` | Blocked in this region. | Upload the file. |
 | `unavailable` | Removed or never existed. | Stop. |

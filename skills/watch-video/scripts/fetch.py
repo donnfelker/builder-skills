@@ -50,14 +50,17 @@ ERROR_CLASSES = [
 ]
 
 MESSAGES = {
-    "bot_check": ("The site asked for a sign-in to prove this is not a bot. This usually means the network is a datacenter or shared IP.",
-                  "On your own computer, retry with --cookies-from-browser chrome (or safari, firefox). In a cloud sandbox, upload the video file instead, or run the download on your own computer and hand the file back."),
+    "bot_check": ("The video site blocked this request and asked for a sign-in to prove it is not a bot.",
+                  "If this is a cloud session, run this in Claude desktop or Claude Code instead. " + common.WHY_CLOUD +
+                  " If you already are on your own computer, retry with --cookies-from-browser chrome (or safari, "
+                  "firefox). You can also attach the video file instead."),
     "private": ("The video is private, members-only, or needs a login.",
-                "On your own computer, retry with --cookies-from-browser chrome (or safari, firefox) while logged in. Sandboxes have no browser profile, so upload the file instead."),
+                "In Claude desktop or Claude Code, retry with --cookies-from-browser chrome (or safari, firefox) "
+                "while logged in to the site. Cloud sessions have no browser, so attach the video file instead."),
     "unavailable": ("The video is unavailable or was removed.", None),
-    "geo": ("The video is blocked in this region.", "Upload the file, or download it from a computer in a region where it plays."),
-    "network": ("This environment cannot reach the video site.",
-                "Upload the video file here, or run the download on your own computer and hand the file back."),
+    "geo": ("The video is blocked in this region.", "Attach the video file, or download it from a computer in a region where it plays."),
+    "network": ("The network here does not allow connections to the video site.",
+                "You can attach the video file instead, which needs no network change. " + common.NETWORK_RISK),
     "unsupported": ("yt-dlp does not support this URL.", "Download the video another way and pass the file path."),
 }
 

@@ -32,9 +32,7 @@ HOSTS = {
 
 KEYS = ["GEMINI_API_KEY", "OPENAI_API_KEY", "GROQ_API_KEY"]
 
-NETWORK_FIX = ("To allow it in Claude: Settings > Capabilities > Allow network egress, all domains "
-               "(Team and Enterprise: an admin sets this in Organization settings > Capabilities), "
-               "then start a new session.")
+NETWORK_FIX = common.NETWORK_RISK
 
 
 def run(cmd, timeout=600):
@@ -196,7 +194,7 @@ def summarize(report):
     net = report["network"]
     if not net.get("youtube", True):
         cannot.append("download from URLs: the network here blocks video sites. " + NETWORK_FIX +
-                      " Or upload the video file instead.")
+                      " Or attach the video file instead, which needs no network change.")
     elif t["yt-dlp"]["path"]:
         can.append("download from video URLs")
     else:

@@ -9,6 +9,10 @@ Get a video's transcript, and on request its key visual moments, into a folder o
 
 The commands live in tested scripts in `scripts/`. Your job is to run them in order, read their JSON output, and route on it.
 
+## Where it runs
+
+Video links (YouTube and most other video sites) work in Claude desktop (Cowork on your computer) and Claude Code. Cloud sessions are often blocked: they run on Anthropic's servers, and video sites block requests from data centers to stop bots. Attached video files work everywhere. When the person gives a link in a cloud session, try it, and if the site blocks it, explain this and suggest Claude desktop or Claude Code.
+
 Every script prints one JSON object. `"status": "ok"` means continue. `"status": "error"` carries `error`, and often `fix` and `kind`. Run scripts with `python3 <this skill's folder>/scripts/<name>.py`.
 
 ## Step 1: Check the environment
@@ -16,8 +20,9 @@ Every script prints one JSON object. `"status": "ok"` means continue. `"status":
 Run `scripts/preflight.py`. It reports the OS, tools, Whisper backend, network reach, API keys, and output folder, plus `can` and `cannot` lists in plain words.
 
 - **No shell at all** (you cannot run commands here): say that this skill needs a place that can run scripts, such as Claude Code or Cowork. Ask for a transcript file instead, and stop.
-- **Something missing**: on macOS, preflight names a `brew` or `uv` command. On Linux, it offers `--install`, which puts yt-dlp, ffmpeg, and faster-whisper into a private folder (`~/.cache/watch-video/venv`). Ask before installing anything, then run `preflight.py --install`.
-- **Network blocked** (a `cannot` entry says the network blocks video sites or the Whisper model): pass the message on as written. It names the Claude setting to change. Do not run `--install` for that; installing does not get past a blocked network. Offer the routes that still work: an uploaded video with a transcript file, or visual mode.
+- **Something missing, in a Claude sandbox** (`claude_sandbox` is true, as in Cowork): run `preflight.py --install` without asking. It only installs into a private folder in a temporary virtual machine, and nothing on the person's computer changes. Say in one line what you installed. Cloud sessions start empty, so this happens in each new one.
+- **Something missing, on the person's own computer**: on macOS, preflight names a `brew` or `uv` command. On Linux, `--install` puts yt-dlp, ffmpeg, and faster-whisper into a private folder (`~/.cache/watch-video/venv`). Ask before installing, then run it.
+- **Network blocked** (a `cannot` entry says the network blocks video sites or the Whisper model): pass the message on, including its risk warning. It names the Claude setting to change. Let the person decide; do not urge them to open network access. Offer the route that needs no change first: attach the video file, with a transcript file if they have one. Do not run `--install` for this; installing does not get past a blocked network.
 - **Where to save.** If your environment tells you where to put files for the person (an outputs folder, a connected folder), set `WATCH_VIDEO_DIR` to a `videos` folder inside it on every script call, for example `WATCH_VIDEO_DIR=<outputs>/videos python3 scripts/fetch.py ...`. If you do not know, leave it unset; the scripts pick a folder the person can see. Never ask the person where to save.
 - **Attached files.** Use the path you were given for an attached file. Do not ask the person for it.
 - Run preflight once per session, not once per video. In cloud sessions the install does not carry over, so a new session may need `--install` again.
@@ -47,7 +52,8 @@ Run `scripts/transcribe.py <workdir>` with any `--lang`. It tries, in order: a t
 - **`"status": "partial"`** (exit code 3): long videos transcribe in 10-minute chunks. Run the same command again, without `--force`, until the status is `ok`. Tell the person how far along it is.
 - **`warning` is set**: no backend passed the coverage and words-per-minute check. Keep the transcript and pass the warning on.
 - **`kind: no_whisper` or `model_download`**: if `OPENAI_API_KEY` or `GROQ_API_KEY` is set, offer hosted transcription and follow the privacy gate below. Otherwise ask for a transcript file.
-- **`kind: network`, `bot_check`, or `geo`**: do not retry or look for workarounds. Say which step failed and offer the two options that work: upload the file here, or download it on your own computer and hand it back.
+- **`kind: bot_check`**: the video site blocked the request. Do not retry or look for workarounds. Pass on the `fix` text: it tells the person to run this in Claude desktop or Claude Code and explains why in plain words. Also offer to work from an attached video file.
+- **`kind: network` or `geo`**: do not retry. Pass on the `fix` text, including its risk warning for network access, and offer to work from an attached video file.
 - Long CPU-only run: when preflight shows no GPU and no Apple Silicon and the video runs over 30 minutes, say it may run slower than the video plays, and offer hosted transcription if a key is set.
 
 **Transcript mode stops here.** Go to Step 7.
