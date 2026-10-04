@@ -1,7 +1,7 @@
 {
   "name": "builder-skills",
   "displayName": "Builder Skills",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Skills for people who build things. Decisions, writing, learning, and planning.",
   "author": {
     "name": "Donn Felker",

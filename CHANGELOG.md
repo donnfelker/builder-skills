@@ -2,6 +2,10 @@
 
 Versions follow the rules in [AGENTS.md](AGENTS.md#versioning). The current version lives in `.claude-plugin/plugin.json`.
 
+## 1.0.1
+
+- Updated the plugin description in `marketplace.json` to match the new tagline.
+
 ## 1.0.0
 
 - Renamed the pack from `maverick-skills` to `builder-skills`. New tagline: "Skills for people who build things."
