@@ -171,6 +171,11 @@ class FetchTests(unittest.TestCase):
         self.assertEqual(fetch.pick_track(meta, None), ("en-orig", "auto"))
         self.assertEqual(fetch.pick_track(meta, "fr"), (None, None))
 
+    def test_bot_check_message_points_to_desktop_and_explains_why(self):
+        fix = fetch.MESSAGES["bot_check"][1]
+        self.assertIn("Claude desktop or Claude Code", fix)
+        self.assertIn("data center", fix)
+
     def test_classify(self):
         self.assertEqual(fetch.classify("ERROR: Sign in to confirm you’re not a bot"), "bot_check")
         self.assertEqual(fetch.classify("ERROR: Private video"), "private")
@@ -262,7 +267,8 @@ class PreflightTests(unittest.TestCase):
         r = self.report(youtube=False, hf=False)
         preflight.summarize(r)
         text = " ".join(r["cannot"])
-        self.assertIn("Allow network egress", text)
+        self.assertIn("Settings > Capabilities", text)
+        self.assertIn("risk", text)
         self.assertNotIn("--install", text)
 
     def test_open_network_with_tools_is_ok(self):

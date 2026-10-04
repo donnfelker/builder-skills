@@ -62,6 +62,19 @@ def load_config():
     return cfg
 
 
+# Plain-language reason a site blocks cloud sessions. Shown with bot checks.
+WHY_CLOUD = ("Cloud sessions run on Anthropic's servers, so the site sees the request coming from a data center "
+             "instead of a home internet connection. Sites like YouTube often block data centers to stop bots. "
+             "Claude desktop (Cowork on your computer) and Claude Code run on your own computer, so the request "
+             "comes from your internet connection, and the site lets it through.")
+
+NETWORK_RISK = ("To allow it: in Claude, open Settings > Capabilities and turn on network access for code "
+                "(Team and Enterprise: an admin sets this in Organization settings > Capabilities), then start a "
+                "new session. Know the risk first: with more network access, a web page or file Claude reads could "
+                "contain hidden instructions that try to send your data somewhere else. Anthropic suggests watching "
+                "what Claude does and stopping it if anything looks wrong: "
+                "https://support.claude.com/en/articles/12111783-create-and-edit-files-with-claude")
+
 # Fallback only: Claude's sandboxes (Cowork, claude.ai) show the person files
 # saved here. The agent should pass its own outputs folder as WATCH_VIDEO_DIR.
 SANDBOX_OUTPUTS = Path("/mnt/user-data/outputs")
