@@ -20,9 +20,13 @@ builder-skills/
 ├── .claude-plugin/
 │   ├── plugin.json         # plugin manifest (name, version, skills path)
 │   └── marketplace.json    # marketplace manifest (lists the plugin)
+├── .github/workflows/      # CI: repo rules, skill validation, skill tests, releases
+├── scripts/
+│   └── check-repo.py       # checks the rules in this file
 ├── skills/
 │   └── <skill-name>/
-│       └── SKILL.md        # one folder per skill
+│       ├── SKILL.md        # one folder per skill
+│       └── tests/          # optional; CI runs them on Linux and macOS
 ├── AGENTS.md
 ├── CLAUDE.md               # imports AGENTS.md
 ├── CHANGELOG.md
@@ -97,6 +101,8 @@ One version number, stored in `.claude-plugin/plugin.json`. Format `x.y.z`.
 Add a matching heading to `CHANGELOG.md` for every bump.
 
 ## Pre-commit checklist
+
+Run `python3 scripts/check-repo.py` before committing. It checks most of the list below. CI runs it on every pull request with `--base origin/main`, which also requires a version bump when skills change. CI also runs the Agent Skills validator on changed skills and each skill's `tests/` folder.
 
 Run each check before committing.
 

@@ -1,0 +1,45 @@
+name: Check Repo
+
+# Enforces the AGENTS.md rules: frontmatter, names, descriptions, README table,
+# manifests, changelog, writing rules, and (on pull requests) a version bump.
+# Also runs `claude plugin validate .` on the plugin and marketplace manifests.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-repo-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft != true
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Check repo rules
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            python3 scripts/check-repo.py --base "origin/${{ github.base_ref }}"
+          else
+            python3 scripts/check-repo.py
+          fi
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Validate plugin manifests
+        run: npx -y @anthropic-ai/claude-code plugin validate .

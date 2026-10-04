@@ -1,0 +1,107 @@
+name: Skill Tests
+
+# Runs each skill's own tests (skills/<name>/tests) on Linux and macOS, on the
+# oldest supported Python (3.9, what macOS ships) and a current one. Then runs a
+# small offline smoke test of watch-video: preflight, metadata, and frames.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "skills/**"
+      - ".github/workflows/skill-tests.yml"
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [main]
+    paths:
+      - "skills/**"
+      - ".github/workflows/skill-tests.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: skill-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit:
+    if: github.event.pull_request.draft != true
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python: ["3.9", "3.12"]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Run skill tests
+        run: |
+          status=0
+          for t in skills/*/tests; do
+            [ -d "$t" ] || continue
+            echo "::group::$t"
+            (cd "$(dirname "$t")" && python -m unittest discover -s tests -v) || status=1
+            echo "::endgroup::"
+          done
+          exit $status
+
+  watch-video-smoke:
+    if: github.event.pull_request.draft != true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update -q && sudo apt-get install -y -q ffmpeg
+          echo "WATCH_VIDEO_DIR=$RUNNER_TEMP/videos" >> "$GITHUB_ENV"
+
+      - name: Make a test video with a transcript beside it
+        run: |
+          mkdir -p "$RUNNER_TEMP/fixture"
+          ffmpeg -hide_banner -loglevel error -f lavfi -i "color=c=navy:s=640x360:r=5:d=90" \
+            -f lavfi -i "sine=frequency=440:duration=90" \
+            -vf "drawbox=x=0:y=0:w=640:h=360:color=white@1:t=fill:enable='gte(t,45)'" \
+            -c:v libx264 -c:a aac -shortest "$RUNNER_TEMP/fixture/demo.mp4"
+          printf 'WEBVTT\n\n00:00:00.000 --> 00:00:45.000\nAnn Lee: %s\n\n00:00:45.000 --> 00:01:28.000\nBo Kim: %s\n' \
+            "$(printf 'word %.0s' $(seq 1 110))" "$(printf 'word %.0s' $(seq 1 110))" > "$RUNNER_TEMP/fixture/demo.vtt"
+
+      - name: Preflight reports and exits cleanly
+        run: python skills/watch-video/scripts/preflight.py --no-network
+
+      - name: Metadata, transcript from the file beside the video, and frames
+        run: |
+          set -e
+          S=skills/watch-video/scripts
+          W=$(python $S/fetch.py meta "$RUNNER_TEMP/fixture/demo.mp4" | python -c "import json,sys;print(json.load(sys.stdin)['workdir'])")
+          python $S/transcribe.py "$W" > out.json
+          python - <<'PY'
+          import json
+          d = json.load(open("out.json"))
+          assert d["status"] == "ok", d
+          assert d["backend"].startswith("file:"), d
+          PY
+          grep -q "Ann Lee" "$W/transcript.md"
+          python $S/frames.py "$W" --style slides > frames.json
+          python - <<'PY'
+          import json
+          d = json.load(open("frames.json"))
+          assert d["status"] == "ok", d
+          assert 2 <= d["count"] <= 12, d["count"]
+          PY
+          # A second run must come from the cache
+          python $S/fetch.py meta "$RUNNER_TEMP/fixture/demo.mp4" | grep -q '"cached": true'
