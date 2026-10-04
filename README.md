@@ -8,9 +8,11 @@ A free pack of skills for Claude and other AI agents. It is for people who build
 
 | Skill | What it does | Try saying |
 |-------|--------------|------------|
-| [distill-video](skills/distill-video/) | Turns a video or podcast transcript into short notes on the key ideas, lessons, and things to try. | "Distill this video" |
+| [distill-video](skills/distill-video/) | Turns a video link, video file, or transcript into short notes on the key ideas, lessons, and things to try. | "Distill this video" |
 | [new-skills-repo](skills/new-skills-repo/) | Builds a new public GitHub repo that shares a pack of skills, with install steps and a README. | "Make a skills repo" |
+| [read-social](skills/read-social/) | Reads a social media post from its link and returns the author, date, text, and engagement in one format. | "Read this tweet" |
 | [revise-plan](skills/revise-plan/) | Stress-tests a plan and returns the smallest revision that makes it more likely to succeed. | "Poke holes in my plan" |
+| [watch-video](skills/watch-video/) | Gets the transcript of a video from a link or file, and optionally its key visual moments. | "Transcribe this video" |
 
 ## Install
 
@@ -101,6 +103,10 @@ Found a mistake or have a skill to add? Open an issue or a pull request. The rul
 ## License
 
 [MIT](LICENSE). Free to use, copy, and change.
+
+## Hat tip
+
+Some skills were influenced by [makerskills](https://github.com/coreyhaines31/makerskills) by Corey Haines (MIT License, Copyright (c) 2026 Corey Haines) and have been altered for this repository.
 
 ## About the author
 

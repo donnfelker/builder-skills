@@ -8,6 +8,9 @@ skills-lock.json
 .env.*
 !.env.example
 
+# Python
+__pycache__/
+
 # macOS
 .DS_Store
 **/.DS_Store

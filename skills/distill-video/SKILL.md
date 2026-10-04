@@ -1,6 +1,6 @@
 ---
 name: distill-video
-description: "Turns the transcript of a video, podcast, interview, lecture, talk, or tutorial into a short set of notes on what mattered: the main message, key ideas, lessons, systems, and concrete things to try. Use when you have a transcript (pasted, in a file, or saved by watch-video) and want the value pulled out of it, even if you only say \"summarize this\". Use when you say \"distill this video\", \"summarize this transcript\", \"summarize this video\", \"key takeaways from this podcast\", \"turn this transcript into notes\", \"what's worth remembering from this\", or \"break down this lecture\"."
+description: "Turns a video, podcast, interview, lecture, talk, or tutorial into a short set of notes on what mattered: the main message, key ideas, lessons, systems, and concrete things to try. Use when you have a transcript (pasted, in a file, or saved by watch-video) or a video link or file, and want the value pulled out of it, even if you only say \"summarize this\". Use when you say \"distill this video\" followed by a link, \"summarize this YouTube video\", \"summarize this transcript\", \"key takeaways from this podcast\", \"turn this transcript into notes\", \"what's worth remembering from this\", or \"break down this lecture\"."
 ---
 
 # Distill video
@@ -11,11 +11,12 @@ This is not a shorter transcript. A recap that walks through the video in order 
 
 ## Step 1: Get the transcript
 
-The input is a transcript the user already has. It may be pasted into the chat, attached, or saved in a file (often a `transcript.txt` saved by the `watch-video` skill).
+Work out what the input is, then get a transcript from it.
 
-- **File.** Read it directly. Do not ask the user to paste something that is already in a file.
-- **Folder.** If the user points to a folder, look for `transcript.txt` (or the closest match) inside it.
-- **Link only.** If `watch-video` is installed, use it to get the transcript, then continue. Otherwise, tell the user how to copy one and stop. For YouTube: open the video, expand the description, click "Show transcript," then select and copy the text.
+- **Transcript text or file.** Pasted, attached, or a `.txt`, `.md`, `.vtt`, or `.srt` file. Read it directly. Do not ask the user to paste something that is already in a file.
+- **Folder.** Look for `transcript.md` first (it has timestamps), then `transcript.txt`, then the closest match.
+- **Video link or video file.** If `watch-video` is installed, run it in transcript mode on the link or file, and tell it `distill-video` is the caller. Then read `transcript.md` from the workdir it reports. A second request for the same video returns the saved transcript at once, so do not search for old transcripts yourself. Never ask for visual or multimodal mode from here.
+- **Video, but `watch-video` is not installed.** Ask for a transcript, and say that the `watch-video` skill can fetch one from a link. For YouTube without it: open the video, expand the description, click "Show transcript," then select and copy the text.
 - **Nothing to read.** Ask for the transcript and stop.
 
 Never write a distillation from a title, a description, or what you already know about the speaker or video. Why: it reads as a summary of the video but is a guess, and the user cannot tell the difference.
@@ -37,7 +38,7 @@ Let the answers shape the output. A tutorial needs steps. A philosophy talk need
 
 Auto-generated transcripts are messy. Expect missing punctuation, no speaker labels, misheard words, `[music]` tags, and timestamps.
 
-- Ignore timestamps unless the user asks for them.
+- **Timestamps.** When the transcript has them (`transcript.md` from `watch-video` starts each paragraph with one, like `**[00:12:34]**`), add the start time in brackets after each key idea and each quote, such as `[00:12:34]`, so the reader can jump to that spot. Use the time of the paragraph the idea came from. One timestamp per idea is enough. When the transcript has no timestamps, leave them out.
 - Fix an obvious mishearing silently only when the meaning is certain. Otherwise keep the original word and flag it.
 - If the transcript looks cut off, or parts are garbled, say what you could and could not analyze. Do not present a partial read as the whole piece.
 
@@ -181,7 +182,7 @@ should understand the essence.]
 
 Save the distillation as `distillation.md` and also show it in the chat.
 
-1. **Where.** If the transcript came from a file, save in the same folder. If it was pasted, save in the current working folder.
+1. **Where.** If the transcript came from `watch-video` or from a file, save in the same folder as the transcript (for `watch-video`, its workdir). If it was pasted, save in the current working folder.
 2. **Do not overwrite.** If `distillation.md` already exists there, do not replace it silently. Ask the user. If you cannot ask, save to a new folder named after the video (for example, `distill-<short-slug>/distillation.md`) and say where it went.
 3. **No file access.** If you cannot write files here, show the distillation in the chat and say it was not saved.
 4. After the distillation, tell the user where the file is in one line.
