@@ -48,7 +48,9 @@ Recommend updating the second brain first when any of these is true:
 
 When you recommend an update, say why in one line, with the date. Example: "Your notes were last updated October 2, and you met Dana on October 20. That meeting is not in your notes." Then say how to update:
 
-- If `second-brain` is installed: run `/second-brain compile` to process raw notes, and capture any recent call notes first.
+- If `second-brain` is installed:
+  1. Capture anything new first: notes, transcripts, and emails from recent meetings with these people. Run `/second-brain capture` for each one.
+  2. Then run `/second-brain compile` to process everything in `raw/`, including what you just captured.
 - Otherwise: add notes from recent meetings and emails with these people to the vault, then run this skill again.
 
 Ask whether to update first or prep now with what is there. If the meeting starts within the hour, prep now and put the warning at the top of the brief.
