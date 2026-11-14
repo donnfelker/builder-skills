@@ -31,6 +31,35 @@ The notes cover the main message, key ideas, lessons, and things to try. They ma
 
 ---
 
+## `meeting-prep`
+
+**Try saying:** "Prep me for my meeting with Dana"
+
+**You:** *"Prep me for my 2pm with Dana."*
+
+**meeting-prep:** Finds the 2pm on your calendar and sees that Dana and Sam from Acme are invited. It checks your second brain, notes it was last updated 18 days ago, and suggests updating it first. Then it reads your notes on Dana, Sam, and the Acme projects and saves a brief:
+
+```
+# Meeting prep: Acme website check-in
+Tue, Nov 17 · 2:00 PM · 30 min · Dana Ruiz, Sam Lee
+Notes last updated: Oct 30. Your Nov 3 call with Dana is not in your notes.
+
+## Project status
+| Project | Status | Last update | Open or blocked |
+| Website redesign | Late | Oct 28 | Waiting on Acme for copy |
+
+## Hard things to say
+### The launch date is slipping
+- Open with: "I need to be straight with you about the launch date."
+...
+## Close the meeting
+- [ ] Each action item has one owner and a date
+```
+
+When the meeting ends, paste your notes and it saves them to your second brain for next time.
+
+---
+
 ## `new-skills-repo`
 
 **Try saying:** "Make a skills repo"
