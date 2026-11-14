@@ -2,6 +2,10 @@
 
 Versions follow the rules in [AGENTS.md](AGENTS.md#versioning). The current version lives in `.claude-plugin/plugin.json`.
 
+## 1.2.0
+
+- Added `meeting-prep`: finds an upcoming meeting on your connected calendar, reads your second brain for the people and projects involved, and writes a brief with project status, hard things to say, steps to take before the meeting, and a checklist to close it with clear action items. It warns you when your notes are out of date and suggests updating them first.
+
 ## 1.1.3
 
 - `watch-video` says where video links work: Claude desktop and Claude Code. Cloud sessions are often blocked by video sites. When that happens, it tells you to switch and explains why in plain words.
