@@ -6,6 +6,28 @@ The outputs are short, hand-written illustrations, not exact captures. Real runs
 
 ---
 
+## `deathby-slides`
+
+**Try saying:** "Make slides for my talk"
+
+**You:** *"Make slides for my 10 minute talk on why we should move to a four day week."*
+
+**deathby-slides:** Asks who the audience is and whether you will present live. Then it outlines the talk as one message per slide, writes what you will say into the speaker notes, and builds the slides with a few words each:
+
+```
+Slide 4 (dark background, 3 objects)
+  Same output  [small]
+  32 hours     [very large]
+  [photo of an empty office on a Friday]
+
+Notes: "In the six month trial, the team shipped the same
+amount of work in 32 hours as it had in 40..."
+```
+
+Every slide is checked against the five rules from David JP Phillips's talk "How to Avoid Death by PowerPoint": one message, no sentences, the main thing is the largest, a dark background with contrast that guides the eye, and six objects or fewer. Give it a deck you already have and it lists what it would change and why, then waits for your approval. You choose to go one slide at a time or approve the whole plan at once.
+
+---
+
 ## `distill-video`
 
 **Try saying:** "Distill this video"
