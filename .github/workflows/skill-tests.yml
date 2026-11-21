@@ -1,8 +1,9 @@
 name: Skill Tests
 
 # Runs each skill's own tests (skills/<name>/tests) on Linux and macOS, on the
-# oldest supported Python (3.9, what macOS ships) and a current one. Then runs a
-# small offline smoke test of watch-video: preflight, metadata, and frames.
+# oldest supported Python (3.9, what macOS ships) and a current one. When
+# watch-video or this file changed, it also runs a small offline smoke test of
+# watch-video: preflight, metadata, and frames.
 
 on:
   push:
@@ -33,6 +34,14 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
         python: ["3.9", "3.12"]
+        # Python 3.9 has no build for Ubuntu 26.04 (ubuntu-latest), so the
+        # Linux 3.9 job runs on the last Ubuntu image that still has one.
+        exclude:
+          - os: ubuntu-latest
+            python: "3.9"
+        include:
+          - os: ubuntu-24.04
+            python: "3.9"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -53,8 +62,43 @@ jobs:
           done
           exit $status
 
-  watch-video-smoke:
+  watch-video-changes:
     if: github.event.pull_request.draft != true
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.diff.outputs.changed }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Check for watch-video changes
+        id: diff
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE=${{ github.event.pull_request.base.sha }}
+            HEAD=${{ github.event.pull_request.head.sha }}
+          else
+            BASE=${{ github.event.before }}
+            HEAD=${{ github.event.after }}
+          fi
+
+          # If the diff cannot be read, run the smoke test to be safe
+          if ! FILES=$(git diff --name-only "$BASE" "$HEAD"); then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if echo "$FILES" | grep -qE '^(skills/watch-video/|\.github/workflows/skill-tests\.yml$)'; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  watch-video-smoke:
+    needs: watch-video-changes
+    if: needs.watch-video-changes.outputs.changed == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

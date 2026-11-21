@@ -53,6 +53,25 @@ The notes cover the main message, key ideas, lessons, and things to try. They ma
 
 ---
 
+## `harden-vps`
+
+**Try saying:** "Harden my server"
+
+**You:** *"I just rented a new VPS. Lock it down so only I can get in."*
+
+**harden-vps:** Starts with a read-only check and reports what it finds in plain language:
+
+```
+Admin user   gap    only root exists, and it logs in with a password
+SSH          risk   password logins are on, port 22 is open to the internet
+Firewall     gap    off
+Updates      pass   nightly security updates are on
+```
+
+Then it works through the gaps in a safe order. It creates an admin user with your public key and stops so you can test the login from a new window. It installs Tailscale, closes every port to the public internet, and has you confirm the old address times out. Only then does it turn off root and password logins. It never reboots without you saying so.
+
+---
+
 ## `meeting-prep`
 
 **Try saying:** "Prep me for my meeting with Dana"
