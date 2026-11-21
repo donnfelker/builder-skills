@@ -2,6 +2,10 @@
 
 Versions follow the rules in [AGENTS.md](AGENTS.md#versioning). The current version lives in `.claude-plugin/plugin.json`.
 
+## 1.4.0
+
+- Added `harden-vps`: locks down a Linux server so only your own devices can reach it, or checks one you already have. It sets up a key-only admin user, turns off root and password logins, puts the server behind Tailscale and a firewall, and turns on nightly security updates. It stops for a human check before each step that could lock you out.
+
 ## 1.2.0
 
 - Added `meeting-prep`: finds an upcoming meeting on your connected calendar, reads your second brain for the people and projects involved, and writes a brief with project status, hard things to say, steps to take before the meeting, and a checklist to close it with clear action items. It warns you when your notes are out of date and suggests updating them first.
