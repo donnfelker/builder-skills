@@ -6,6 +6,10 @@ Versions follow the rules in [AGENTS.md](AGENTS.md#versioning). The current vers
 
 - Added `harden-vps`: locks down a Linux server so only your own devices can reach it, or checks one you already have. It sets up a key-only admin user, turns off root and password logins, puts the server behind Tailscale and a firewall, and turns on nightly security updates. It stops for a human check before each step that could lock you out.
 
+## 1.3.0
+
+- Added `deathby-slides`: builds and reviews presentation slides using the five rules from David JP Phillips's talk "How to Avoid Death by PowerPoint". One message per slide, short phrases in place of sentences, the main thing is the largest, a dark background with contrast that guides the eye, and six objects or fewer. What you will say goes in the speaker notes. On a deck you already have, it lists each change and the reason, then waits for your approval, one slide at a time or all at once.
+
 ## 1.2.0
 
 - Added `meeting-prep`: finds an upcoming meeting on your connected calendar, reads your second brain for the people and projects involved, and writes a brief with project status, hard things to say, steps to take before the meeting, and a checklist to close it with clear action items. It warns you when your notes are out of date and suggests updating them first.

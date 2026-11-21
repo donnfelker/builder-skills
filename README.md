@@ -19,6 +19,7 @@ A skill is a short instruction file that teaches an AI agent how to do one kind 
 <!-- SKILLS:START -->
 | Skill | Description |
 |-------|-------------|
+| [deathby-slides](skills/deathby-slides/) | Builds and improves presentation slides so the audience remembers the talk: one message per slide, short phrases in... |
 | [distill-video](skills/distill-video/) | Turns a video, podcast, interview, lecture, talk, or tutorial into a short set of notes on what mattered: the main... |
 | [harden-vps](skills/harden-vps/) | Locks down a Linux server (VPS) so only your own devices can reach it, or checks one you already have. It sets up a... |
 | [meeting-prep](skills/meeting-prep/) | Prepares you for an upcoming meeting. It finds the meeting on your calendar, sees who will be there, and reads your... |
