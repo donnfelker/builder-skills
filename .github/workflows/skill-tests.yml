@@ -33,6 +33,14 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
         python: ["3.9", "3.12"]
+        # Python 3.9 has no build for Ubuntu 26.04 (ubuntu-latest), so the
+        # Linux 3.9 job runs on the last Ubuntu image that still has one.
+        exclude:
+          - os: ubuntu-latest
+            python: "3.9"
+        include:
+          - os: ubuntu-24.04
+            python: "3.9"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
